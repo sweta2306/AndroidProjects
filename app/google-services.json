@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "867624198295",
+    "firebase_url": "https://grivancecell-95395.firebaseio.com",
+    "project_id": "grivancecell-95395",
+    "storage_bucket": "grivancecell-95395.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867624198295:android:4e68cf1d62a67335",
+        "android_client_info": {
+          "package_name": "com.example.a1406074.grivancecell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867624198295-l1f0khvhcc5norani5oumfrl5dmsgret.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a1406074.grivancecell",
+            "certificate_hash": "310FA714F53B0ED224DFAB77E26D49336AF52FD7"
+          }
+        },
+        {
+          "client_id": "867624198295-0p6mfvg0eu5bi9qpha4gmmaudje8rvdt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCguSAUT2Z4d5Iw1TrPlt0Eqd8XzwkSOU0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867624198295-0p6mfvg0eu5bi9qpha4gmmaudje8rvdt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

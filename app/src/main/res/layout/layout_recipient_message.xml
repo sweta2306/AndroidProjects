@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:weightSum="100"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:gravity="start"
+        android:layout_weight="50"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            tools:text="Hi. How are you?"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:background="@drawable/recipient_rounded_corners"
+            android:layout_height="wrap_content"
+            android:id="@+id/OTHER_ID" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="50"
+        android:layout_gravity="end"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            tools:text="Hi. How are you?"
+            android:padding="8dp"
+            android:gravity="end"
+            android:id="@+id/MY_ID"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:background="@drawable/recipient_rounded_corners"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
