@@ -2,6 +2,7 @@ package com.example.a1406074.grivancecell.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mUserRefDatabase;
     private ChildEventListener mChildEventListener;
     private RecyclerViewAdapter mUsersChatAdapter;
+    public static String ReceipID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

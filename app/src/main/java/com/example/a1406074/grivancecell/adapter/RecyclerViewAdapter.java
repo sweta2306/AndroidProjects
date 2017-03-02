@@ -2,6 +2,7 @@ package com.example.a1406074.grivancecell.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.example.a1406074.grivancecell.FireChatHelper.ExtraIntent;
 import com.example.a1406074.grivancecell.R;
 import com.example.a1406074.grivancecell.model.User;
 import com.example.a1406074.grivancecell.ui.ChatActivity;
+import com.example.a1406074.grivancecell.ui.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -107,6 +109,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Intent chatIntent = new Intent(Main, ChatActivity.class);
                     chatIntent.putExtra(ExtraIntent.EXTRA_CURRENT_USER_ID,mAuth.getCurrentUser().getUid() );
                     chatIntent.putExtra(ExtraIntent.EXTRA_RECIPIENT_ID, user.uid);
+
+                    MainActivity.ReceipID=user.uid;
 
 
                     // Start new activity

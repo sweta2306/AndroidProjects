@@ -1,6 +1,7 @@
 package com.example.a1406074.grivancecell.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapters;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -55,7 +57,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         Bundle extras= getIntent().getExtras();
-        mRecipientId=extras.getString(ExtraIntent.EXTRA_RECIPIENT_ID);
+
+        mRecipientId=MainActivity.ReceipID;
 
         databaseReference=FirebaseDatabase.getInstance().getReference().child("Chats");
 
@@ -72,27 +75,14 @@ public class ChatActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         mUserMessageChatText=(EditText) findViewById(R.id.edit_text_message);
 
-        SEND_MESSAGE.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if(!TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim()))
-                {
-                  DatabaseReference ds=  databaseReference.child(mAuth.getCurrentUser().getUid()).child((System.currentTimeMillis()-10000)+"");
-
-                    ds.child("Message").setValue(TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim()));
-                    ds.child("Uid").setValue(mAuth.getCurrentUser().getUid());
-                }
-
-            }
-        });
 
 
 
 
         messageChatDatabase = FirebaseDatabase.getInstance().getReference().child("Chats").child(mRecipientId);
 
-        messageChatDatabase.addValueEventListener(new ValueEventListener() {
+        messageChatDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -129,10 +119,77 @@ public class ChatActivity extends AppCompatActivity {
                 mChatRecyclerView.setAdapter(mUsersChatAdapter);
 
 
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        SEND_MESSAGE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim()))
+                {
+                   // Chats.clear();
+                    DatabaseReference ds=  databaseReference.child(mAuth.getCurrentUser().getUid()).child((System.currentTimeMillis()-10000)+"");
+
+                    ds.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
+                    ds.child("Uid").setValue(mAuth.getCurrentUser().getUid());
+
+
+                   messageChatDatabase.addValueEventListener(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                           for (DataSnapshot ds: dataSnapshot.getChildren())
+                           {
+
+                               messageChatDatabase.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
+                                   @Override
+                                   public void onDataChange(DataSnapshot dataSnapshotd) {
+
+
+
+                                       ChatMessage CHAT=dataSnapshotd.getValue(ChatMessage.class);
+
+                                       Log.v("Messages",CHAT.Message);
+
+                                       Chats.add(CHAT);
+
+
+                                   }
+
+                                   @Override
+                                   public void onCancelled(DatabaseError databaseError) {
+
+                                   }
+                               });
+
+
+                           }
+                           int i= Chats.size();
+                           ChatMessage cM =Chats.get(i-1);
+
+                           ArrayList<ChatMessage> c=new ArrayList<ChatMessage>();
+
+                           c.add(cM);
+
+                           mUsersChatAdapter = new RecyclerViewAdapters(c,ChatActivity.this,mAuth);
+                           mChatRecyclerView.setAdapter(mUsersChatAdapter);
+
+                       }
+
+                       @Override
+                       public void onCancelled(DatabaseError databaseError) {
+
+                       }
+                   });
+                }
 
             }
         });

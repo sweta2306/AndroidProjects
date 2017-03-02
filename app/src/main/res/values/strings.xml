@@ -2,14 +2,15 @@
     <string name="app_name">GrivanceCell</string>
 
 
-        <string name="error_fields_empty">field error</string>
-        <string name="hello_world">Hello world!</string>
-        <string name="action_settings">Settings</string>
-        <string name="title_activity_log_in">activity_login</string>
-        <string name="title_activity_register">activity_register</string>
-        <string name="title_activity_chat">activity_chat</string>
-        <string name="error_incorrect_email_pass">in_em</string>
-        <string name="login_error_title">login</string>
+    <string name="error_fields_empty">field error</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_log_in">activity_login</string>
+    <string name="title_activity_register">activity_register</string>
+    <string name="title_activity_chat">activity_chat</string>
+    <string name="error_incorrect_email_pass">in_em</string>
+    <string name="login_error_title">login</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 
 </resources>
