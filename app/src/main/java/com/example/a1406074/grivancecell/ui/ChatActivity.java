@@ -38,7 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view_chat) RecyclerView mChatRecyclerView;
    // @BindView(R.id.edit_text_message) EditText mUserMessageChatText;
 
-
+    private int Count=0;
     private String mRecipientId;
     private String mCurrentUserId;
     private DatabaseReference messageChatDatabase;
@@ -48,7 +48,9 @@ public class ChatActivity extends AppCompatActivity {
     private EditText mUserMessageChatText;
     private Button SEND_MESSAGE;
     private RecyclerViewAdapters mUsersChatAdapter;
-    private ArrayList<ChatMessage> Chats=new ArrayList<ChatMessage>();
+    private ArrayList<ChatMessage> Chats;
+    ArrayList<ChatMessage> NEWCHATS=new ArrayList<>();
+    public  String FLAG ="First";
 
 
     @Override
@@ -60,6 +62,8 @@ public class ChatActivity extends AppCompatActivity {
 
         mRecipientId=MainActivity.ReceipID;
 
+
+
         databaseReference=FirebaseDatabase.getInstance().getReference().child("Chats");
 
         mChatRecyclerView=(RecyclerView) findViewById(R.id.recycler_view_chat);
@@ -67,28 +71,20 @@ public class ChatActivity extends AppCompatActivity {
 
         SEND_MESSAGE=(Button) findViewById(R.id.btn_send_message);
 
-
-
-
-
-
         mAuth=FirebaseAuth.getInstance();
         mUserMessageChatText=(EditText) findViewById(R.id.edit_text_message);
 
-
-
-
-
-
         messageChatDatabase = FirebaseDatabase.getInstance().getReference().child("Chats").child(mRecipientId);
 
-        messageChatDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        messageChatDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Log.v("Datasnapshot",dataSnapshot.toString()+"Hello");
 
 
+                Chats=new ArrayList<ChatMessage>();
+                Chats.clear();
                 for (DataSnapshot ds: dataSnapshot.getChildren())
                 {
 
@@ -103,7 +99,31 @@ public class ChatActivity extends AppCompatActivity {
                             Log.v("Messages",CHAT.Message);
 
                             Chats.add(CHAT);
+                            Count++;
+                            Log.v("COunt",Count+"");
 
+                            if(FLAG.equals("First"))
+                            {
+
+                                mUsersChatAdapter = new RecyclerViewAdapters(Chats,ChatActivity.this,mAuth);
+                                mChatRecyclerView.setAdapter(mUsersChatAdapter);
+
+                            }
+                            else
+                            {
+                                ArrayList<ChatMessage> NES=new ArrayList<ChatMessage>();
+                                int Size =Chats.size();
+                                Log.v("Size",Size+"");
+                                for(int i=0;i<Size/2;i++)
+                                {
+                                    ChatMessage C = Chats.get(i);
+                                    NES.add(C);
+
+                                }
+                                mUsersChatAdapter = new RecyclerViewAdapters(NES,ChatActivity.this,mAuth);
+                                mChatRecyclerView.setAdapter(mUsersChatAdapter);
+
+                            }
 
                         }
 
@@ -115,11 +135,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
                 }
-                mUsersChatAdapter = new RecyclerViewAdapters(Chats,ChatActivity.this,mAuth);
-                mChatRecyclerView.setAdapter(mUsersChatAdapter);
-
-
-
+                
             }
 
             @Override
@@ -132,63 +148,22 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+                NEWCHATS=new ArrayList<ChatMessage>();
+                for(ChatMessage chats:Chats)
+                {
+                    NEWCHATS.add(chats);
+                }
+
                 if(!TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim()))
                 {
                    // Chats.clear();
-                    DatabaseReference ds=  databaseReference.child(mAuth.getCurrentUser().getUid()).child((System.currentTimeMillis()-10000)+"");
+                    FLAG="Second";
+                    final  DatabaseReference ds=  databaseReference.child(mAuth.getCurrentUser().getUid()).child((System.currentTimeMillis()-10000)+"");
 
                     ds.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
                     ds.child("Uid").setValue(mAuth.getCurrentUser().getUid());
 
-
-                   messageChatDatabase.addValueEventListener(new ValueEventListener() {
-                       @Override
-                       public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                           for (DataSnapshot ds: dataSnapshot.getChildren())
-                           {
-
-                               messageChatDatabase.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
-                                   @Override
-                                   public void onDataChange(DataSnapshot dataSnapshotd) {
-
-
-
-                                       ChatMessage CHAT=dataSnapshotd.getValue(ChatMessage.class);
-
-                                       Log.v("Messages",CHAT.Message);
-
-                                       Chats.add(CHAT);
-
-
-                                   }
-
-                                   @Override
-                                   public void onCancelled(DatabaseError databaseError) {
-
-                                   }
-                               });
-
-
-                           }
-                           int i= Chats.size();
-                           ChatMessage cM =Chats.get(i-1);
-
-                           ArrayList<ChatMessage> c=new ArrayList<ChatMessage>();
-
-                           c.add(cM);
-
-                           mUsersChatAdapter = new RecyclerViewAdapters(c,ChatActivity.this,mAuth);
-                           mChatRecyclerView.setAdapter(mUsersChatAdapter);
-
-                       }
-
-                       @Override
-                       public void onCancelled(DatabaseError databaseError) {
-
-                       }
-                   });
                 }
 
             }
@@ -218,76 +193,4 @@ public class ChatActivity extends AppCompatActivity {
         mChatRecyclerView.setHasFixedSize(true);
 
     }
-
-  /*  @Override
-    protected void onStart() {
-        super.onStart();
-
-        messageChatListener = messageChatDatabase.limitToFirst(20).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildKey) {
-
-                if(dataSnapshot.exists()){
-                    ChatMessage newMessage = dataSnapshot.getValue(ChatMessage.class);
-                    if(newMessage.getSender().equals(mCurrentUserId)){
-                        newMessage.setRecipientOrSenderStatus(MessageChatAdapter.SENDER);
-                    }else{
-                        newMessage.setRecipientOrSenderStatus(MessageChatAdapter.RECIPIENT);
-                    }
-                    messageChatAdapter.refillAdapter(newMessage);
-                    mChatRecyclerView.scrollToPosition(messageChatAdapter.getItemCount()-1);
-                }
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if(messageChatListener != null) {
-            messageChatDatabase.removeEventListener(messageChatListener);
-        }
-        messageChatAdapter.cleanUp();
-
-    }
-
-    @OnClick(R.id.btn_send_message)
-    public void btnSendMsgListener(View sendButton){
-
-        String senderMessage = mUserMessageChatText.getText().toString().trim();
-
-        if(!senderMessage.isEmpty()){
-
-            ChatMessage newMessage = new ChatMessage(senderMessage,mCurrentUserId,mRecipientId);
-            messageChatDatabase.push().setValue(newMessage);
-
-            mUserMessageChatText.setText("");
-        }
-    } */
-
-
 }
