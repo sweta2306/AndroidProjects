@@ -18,6 +18,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".ui.MainUserActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".login.LogInActivity"
@@ -41,7 +53,8 @@
             android:name=".ui.Main2Activity"
             android:label="@string/title_activity_main2" />
         <activity android:name=".ui.Chat2Activity" />
-        <activity android:name=".ui.MainUserActivity"></activity>
+
+        <activity android:name=".login.LoginUserActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,5 @@
 package com.example.a1406074.grivancecell.login;
-
+import java.lang.String;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -48,8 +48,7 @@ public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private AlertDialog dialog;
     private DatabaseReference mdatabase;
-    private String authemail;
-    private String authpass;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,40 +84,38 @@ public class LogInActivity extends AppCompatActivity {
 
                 String Email = mUserEmail.getText().toString().trim();
                 String Password = mUserPassword.getText().toString().trim();
-                if (mUserEmail.getText().toString().trim() == "authority@gmail.com" && mUserPassword.getText().toString().trim() == "12345678")
+                if (Email.equals("authority@gmail.com") && Password.equals("12345678")) {
+
+
+                    mProg.setMessage("Signing you in....");
+                    mProg.show();
+                    mAuth.signInWithEmailAndPassword(Email, Password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+
+                            mProg.dismiss();
+
+                            Intent main_Activity = new Intent(LogInActivity.this, MainActivity.class);
+                            finish();
+                            startActivity(main_Activity);
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            mProg.dismiss();
+                            Toast.makeText(LogInActivity.this, "Can't sign you in.." + e.getLocalizedMessage()
+                                    , Toast.LENGTH_SHORT).show();
+
+
+                        }
+                    });
+                }else{
+
 
                     if (!(TextUtils.isEmpty(Email) || TextUtils.isEmpty(Password))) {
-
-                        mProg.setMessage("Signing you in....");
-                        mProg.show();
-                        mAuth.signInWithEmailAndPassword(Email, Password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-
-                                mProg.dismiss();
-
-                                Intent main_Activity = new Intent(LogInActivity.this, MainActivity.class);
-                                finish();
-                                startActivity(main_Activity);
-
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                                mProg.dismiss();
-                                Toast.makeText(LogInActivity.this, "Can't sign you in.." + e.getLocalizedMessage()
-                                        , Toast.LENGTH_SHORT).show();
-
-
-                            }
-                        });
-
-
-                    } {
-
-                                                    if (!(TextUtils.isEmpty(Email) || TextUtils.isEmpty(Password))) {
 
                                                         mProg.setMessage("Signing you in....");
                                                         mProg.show();
