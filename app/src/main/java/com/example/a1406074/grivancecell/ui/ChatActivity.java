@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapters;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,14 +28,13 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = ChatActivity.class.getSimpleName();
 
     @BindView(R.id.recycler_view_chat) RecyclerView mChatRecyclerView;
-   // @BindView(R.id.edit_text_message) EditText mUserMessageChatText;
+    // @BindView(R.id.edit_text_message) EditText mUserMessageChatText;
 
     private int Count=0;
     private String mRecipientId;
@@ -51,6 +49,8 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<ChatMessage> Chats;
     ArrayList<ChatMessage> NEWCHATS=new ArrayList<>();
     public  String FLAG ="First";
+    private DatabaseReference databaseReference1;
+    private DatabaseReference databaseReference2;
 
 
     @Override
@@ -60,7 +60,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Bundle extras= getIntent().getExtras();
 
-        mRecipientId=MainActivity.ReceipID;
+        mAuth=FirebaseAuth.getInstance();
+        mRecipientId=extras.getString(ExtraIntent.EXTRA_RECIPIENT_ID);
 
 
 
@@ -74,7 +75,9 @@ public class ChatActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         mUserMessageChatText=(EditText) findViewById(R.id.edit_text_message);
 
-        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child("Chats").child(mRecipientId);
+        messageChatDatabase = FirebaseDatabase.getInstance().getReference().child("Chats").child(mRecipientId).child(mAuth.getCurrentUser().getUid());
+        databaseReference1=FirebaseDatabase.getInstance().getReference().child("Chats").child(mAuth.getCurrentUser().getUid()).child(mRecipientId);
+
 
         messageChatDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -85,57 +88,25 @@ public class ChatActivity extends AppCompatActivity {
 
                 Chats=new ArrayList<ChatMessage>();
                 Chats.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren())
-                {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
 
-                    messageChatDatabase.child(ds.getKey()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshotd) {
+                    Log.v("DATASNANSHOT",ds.toString()+"d");
 
-
-
-                            ChatMessage CHAT=dataSnapshotd.getValue(ChatMessage.class);
-
-                            Log.v("Messages",CHAT.Message);
-
-                            Chats.add(CHAT);
-                            Count++;
-                            Log.v("COunt",Count+"");
-
-                            if(FLAG.equals("First"))
-                            {
-
-                                mUsersChatAdapter = new RecyclerViewAdapters(Chats,ChatActivity.this,mAuth);
-                                mChatRecyclerView.setAdapter(mUsersChatAdapter);
-
-                            }
-                            else
-                            {
-                                ArrayList<ChatMessage> NES=new ArrayList<ChatMessage>();
-                                int Size =Chats.size();
-                                Log.v("Size",Size+"");
-                                for(int i=0;i<Size/2;i++)
-                                {
-                                    ChatMessage C = Chats.get(i);
-                                    NES.add(C);
-
-                                }
-                                mUsersChatAdapter = new RecyclerViewAdapters(NES,ChatActivity.this,mAuth);
-                                mChatRecyclerView.setAdapter(mUsersChatAdapter);
-
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
+                    ChatMessage CHAT = ds.getValue(ChatMessage.class);
+                    Chats.add(CHAT);
+                    Count++;
+                    Log.v("COunt", Count + "");
                 }
-                
+                Log.v("Chat Length",Chats.size()+"");
+                mUsersChatAdapter = new RecyclerViewAdapters(Chats,ChatActivity.this,mAuth);
+                mChatRecyclerView.setAdapter(mUsersChatAdapter);
+
+
+
+
+
+
+
             }
 
             @Override
@@ -157,13 +128,15 @@ public class ChatActivity extends AppCompatActivity {
 
                 if(!TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim()))
                 {
-                   // Chats.clear();
+                    // Chats.clear();
                     FLAG="Second";
-                    final  DatabaseReference ds=  databaseReference.child(mAuth.getCurrentUser().getUid()).child((System.currentTimeMillis()-10000)+"");
-
+                    final  DatabaseReference ds= messageChatDatabase.child(System.currentTimeMillis()-10000+"");
+                    DatabaseReference df =databaseReference1.child(System.currentTimeMillis()-10000+"");
                     ds.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
                     ds.child("Uid").setValue(mAuth.getCurrentUser().getUid());
-
+                    df.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
+                    df.child("Uid").setValue(mAuth.getCurrentUser().getUid());
+                    mUserMessageChatText.setText("");
                 }
 
             }
@@ -171,7 +144,7 @@ public class ChatActivity extends AppCompatActivity {
 
        /* setUsersId();
         setChatRecyclerView();*/
-       // setTheme(android.R.style.Theme_Holo);
+        // setTheme(android.R.style.Theme_Holo);
     }
 
     private void bindButterKnife() {
