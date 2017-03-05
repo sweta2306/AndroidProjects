@@ -22,11 +22,11 @@
         <activity
             android:name=".login.LogInActivity"
             android:label="@string/title_activity_log_in"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".register.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ChatActivity"
             android:label="@string/title_activity_chat"
@@ -39,7 +39,9 @@
         </activity>
         <activity
             android:name=".ui.Main2Activity"
-            android:label="@string/title_activity_main2"></activity>
+            android:label="@string/title_activity_main2" />
+        <activity android:name=".ui.Chat2Activity" />
+        <activity android:name=".ui.MainUserActivity"></activity>
     </application>
 
 </manifest>
