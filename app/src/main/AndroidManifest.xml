@@ -18,7 +18,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".ui.MainUserActivity"
@@ -29,7 +28,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".login.LogInActivity"
@@ -53,8 +51,23 @@
             android:name=".ui.Main2Activity"
             android:label="@string/title_activity_main2" />
         <activity android:name=".ui.Chat2Activity" />
+        <activity android:name=".login.LoginUserActivity" />
 
-        <activity android:name=".login.LoginUserActivity"></activity>
+        <service
+            android:name=".Service.MyService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".Service.MessageReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="Grivance_cell_message" />
+            </intent-filter>
+
+
+        </receiver>
     </application>
 
 </manifest>

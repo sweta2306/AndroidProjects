@@ -110,7 +110,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     chatIntent.putExtra(ExtraIntent.EXTRA_CURRENT_USER_ID,mAuth.getCurrentUser().getUid() );
                     chatIntent.putExtra(ExtraIntent.EXTRA_RECIPIENT_ID, user.uid);
 
-                    MainActivity.ReceipID=user.uid;
+                    MainActivity.ReceipID="LCbVFZpgb9ZKr8JJFDfZQ0vrhOm1";
 
 
                     // Start new activity

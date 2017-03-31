@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.a1406074.grivancecell.Service.MyService;
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapters;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -57,6 +58,9 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        startService(new Intent(ChatActivity.this, MyService.class));
+
 
         Bundle extras= getIntent().getExtras();
 

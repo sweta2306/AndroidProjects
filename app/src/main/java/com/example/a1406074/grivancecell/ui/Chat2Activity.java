@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.a1406074.grivancecell.Service.MyService;
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapters;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -24,7 +25,9 @@ import com.example.a1406074.grivancecell.R;
 import com.example.a1406074.grivancecell.model.ChatMessage;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +65,9 @@ public class Chat2Activity extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
         mRecipientId="LCbVFZpgb9ZKr8JJFDfZQ0vrhOm1";
+
+        startService(new Intent(Chat2Activity.this, MyService.class));
+
 
 
 
@@ -134,8 +140,9 @@ public class Chat2Activity extends AppCompatActivity {
                     DatabaseReference df =databaseReference1.child(System.currentTimeMillis()-10000+"");
                     ds.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
                     ds.child("Uid").setValue(mAuth.getCurrentUser().getUid());
+                    ds.child("Date").setValue(new SimpleDateFormat("dd-mm-yyyy").format(new Date(System.currentTimeMillis())));
                     df.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
-                    df.child("Uid").setValue(mUserMessageChatText.getText().toString().trim());
+                    df.child("Uid").setValue(mAuth.getCurrentUser().getUid());
                     mUserMessageChatText.setText("");
                 }
 

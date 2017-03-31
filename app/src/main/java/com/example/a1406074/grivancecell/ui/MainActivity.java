@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.example.a1406074.grivancecell.Service.MyService;
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,11 +62,17 @@ public class MainActivity extends AppCompatActivity {
         //setTheme(android.R.style.Theme_Holo);
         setContentView(R.layout.activity_main);
 
+
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
 
             Intent Login = new Intent(MainActivity.this,LogInActivity.class);
             finish();
             startActivity(Login);
+
+        }else if(!FirebaseAuth.getInstance().getCurrentUser().getEmail().equals("authority@gmail.com")){
+            Intent Chat = new Intent(MainActivity.this,Chat2Activity.class);
+            finish();
+            startActivity(Chat);
 
         }
         else
@@ -153,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
 
                     mAuth.signOut();
 
+                    DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                    databaseReference.child("connection").setValue("offline");
+
 
                     Intent REDIRECT=new Intent(MainActivity.this,LogInActivity.class);
                     finish();
@@ -174,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
         if(mAuth!=null)
         {
 
-            DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
-            databaseReference.child("connection").setValue("offline");
+            //DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+            //databaseReference.child("connection").setValue("offline");
 
 
         }
