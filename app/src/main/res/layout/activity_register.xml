@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
+    android:background="@color/bg_user_message"
     tools:context="com.example.a1406074.grivancecell.register.RegisterActivity">
 
     <!-- For the purpose of the app, many attributes are not refactored-->
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +22,7 @@
         android:layout_marginTop="@dimen/log_in_margin"/>
 
     <EditText
-        android:id="@+id/edit_text_display_name"
+        android:id="@+id/edit_text_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -29,7 +30,18 @@
         android:layout_marginRight="@dimen/log_in_margin"
         android:textColor="@color/text_color"
         android:textColorHint="@color/text_color"
-        android:hint="display name"/>
+        android:hint="location"/>
+
+    <EditText
+        android:id="@+id/edit_text_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="@dimen/log_in_margin"
+        android:layout_marginRight="@dimen/log_in_margin"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/text_color"
+        android:hint="name"/>
 
     <EditText
         android:id="@+id/edit_text_email_register"

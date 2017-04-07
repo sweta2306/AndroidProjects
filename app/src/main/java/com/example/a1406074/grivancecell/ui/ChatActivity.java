@@ -149,6 +149,10 @@ public class ChatActivity extends AppCompatActivity {
        /* setUsersId();
         setChatRecyclerView();*/
         // setTheme(android.R.style.Theme_Holo);
+
+    }
+    private void hideActionBar() {
+        this.getSupportActionBar().hide();
     }
 
     private void bindButterKnife() {

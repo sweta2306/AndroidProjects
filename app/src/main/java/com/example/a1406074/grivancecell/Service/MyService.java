@@ -42,6 +42,7 @@ public class MyService extends Service {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+                Log.v("Chilc","helloiz");
             }
 
             @Override

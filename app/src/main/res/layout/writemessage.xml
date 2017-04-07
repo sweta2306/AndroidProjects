@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_height="wrap_content">
+
+
+
+        <EditText
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:minEms="10"
+            android:id="@+id/DialogText"
+            android:hint="Enter broadcast message"
+            android:textColorHint="#000"
+            android:background="#fff"
+            android:layout_height="wrap_content" />
+
+
+
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:text="Submit"
+        android:id="@+id/Submit_ID"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -8,7 +8,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@android:color/background_dark" />
 
     <View
         android:id="@+id/divider"
@@ -21,7 +22,7 @@
         android:id="@+id/senderContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_user_message"
+        android:background="@color/cardview_light_background"
         android:layout_alignParentBottom="true"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
@@ -33,12 +34,11 @@
             android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
-            android:textSize="14sp"
             android:hint="Type your message"
             android:gravity="top"
             android:layout_toLeftOf="@+id/btn_send_message"
-            />
+            android:fontFamily="sans-serif"
+            android:textColor="?attr/colorPrimaryDark" />
         <Button
             android:id="@+id/btn_send_message"
             android:layout_marginRight="10dp"
@@ -46,7 +46,7 @@
             android:layout_width="72dp"
             android:layout_height="40dp"
             android:text="Send"
-            android:background="@color/colorAccent"
+            android:background="@color/com_facebook_button_background_color"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 

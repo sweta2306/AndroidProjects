@@ -40,8 +40,6 @@ public class LogInActivity extends AppCompatActivity {
     private static final String TAG = LogInActivity.class.getSimpleName();
     private EditText mUserEmail;
     private EditText mUserPassword;
-    //    @BindView(R.id.edit_text_email_login) EditText mUserEmail;
-    //  @BindView(R.id.edit_text_password_log_in) EditText mUserPassWord;
     private Button Login_Button;
     private Button Register_Button;
     private ProgressDialog mProg;
@@ -63,6 +61,7 @@ public class LogInActivity extends AppCompatActivity {
         mUserEmail = (EditText) findViewById(R.id.edit_text_email_login);
         mUserPassword = (EditText) findViewById(R.id.edit_text_password_log_in);
         mAuth = FirebaseAuth.getInstance();
+        hideActionBar();
 
 
         Register_Button.setOnClickListener(new View.OnClickListener() {
@@ -112,63 +111,62 @@ public class LogInActivity extends AppCompatActivity {
 
                         }
                     });
-                }else{
+                } else {
 
 
                     if (!(TextUtils.isEmpty(Email) || TextUtils.isEmpty(Password))) {
 
-                                                        mProg.setMessage("Signing you in....");
-                                                        mProg.show();
-                                                        mAuth.signInWithEmailAndPassword(Email, Password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                                            @Override
-                                                            public void onSuccess(AuthResult authResult) {
+                        mProg.setMessage("Signing you in....");
+                        mProg.show();
+                        mAuth.signInWithEmailAndPassword(Email, Password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
 
-                                                                mProg.dismiss();
+                                mProg.dismiss();
 
-                                                                Intent main_Activity = new Intent(LogInActivity.this, Chat2Activity.class);
-                                                                finish();
-                                                                startActivity(main_Activity);
-
-
-                                                            }
-                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-
-                                                                mProg.dismiss();
-                                                                Toast.makeText(LogInActivity.this, "Can't sign you in.." + e.getLocalizedMessage()
-                                                                        , Toast.LENGTH_SHORT).show();
+                                Intent main_Activity = new Intent(LogInActivity.this, Chat2Activity.class);
+                                finish();
+                                startActivity(main_Activity);
 
 
-                                                            }
-                                                        });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                mProg.dismiss();
+                                Toast.makeText(LogInActivity.this, "Can't sign you in.." + e.getLocalizedMessage()
+                                        , Toast.LENGTH_SHORT).show();
 
 
-                                                    } else {
-                                                        Toast.makeText(LogInActivity.this, "Can't sign you in", Toast.LENGTH_SHORT).show();
-                                                    }
+                            }
+                        });
 
 
-                                                }
+                    } else {
+                        Toast.makeText(LogInActivity.this, "Can't sign you in", Toast.LENGTH_SHORT).show();
+                    }
 
-
-                    //  hideActionBar();
-                    // bindButterKnife();
-                    // setAuthInstance();
 
                 }
-            });
 
 
-        }
+                //hideActionBar();
+                // bindButterKnife();
+                // setAuthInstance();
+
+            }
+        });
+
+
     }
 
 
-
-  /*  private void hideActionBar() {
-       this.getSupportActionBar().hide();
+    private void hideActionBar() {
+        this.getSupportActionBar().hide();
     }
-
+}
+/*
     private void bindButterKnife() {
         ButterKnife.bind(this);
     }

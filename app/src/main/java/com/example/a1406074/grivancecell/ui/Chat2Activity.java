@@ -8,12 +8,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.a1406074.grivancecell.Service.MyService;
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapters;
+import com.example.a1406074.grivancecell.login.LogInActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -152,6 +156,45 @@ public class Chat2Activity extends AppCompatActivity {
        /* setUsersId();
         setChatRecyclerView();*/
         // setTheme(android.R.style.Theme_Holo);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+            databaseReference.child("connection").setValue("offline").addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+
+                    mAuth.signOut();
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+                    databaseReference.child("connection").setValue("offline");
+
+
+                    Intent REDIRECT = new Intent(Chat2Activity.this, LogInActivity.class);
+                    finish();
+                    startActivity(REDIRECT);
+
+
+                }
+            });
+            return true;
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
+
+
+
     }
 
     private void bindButterKnife() {

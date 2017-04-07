@@ -38,9 +38,11 @@ public class RegisterActivity extends AppCompatActivity{
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
-    @BindView(R.id.edit_text_display_name) EditText mUserFirstNameRegister;
+    @BindView(R.id.edit_text_name) EditText mUserName;
     @BindView(R.id.edit_text_email_register) EditText mUserEmailRegister;
     @BindView(R.id.edit_text_password_register) EditText mUserPassWordRegister;
+    @BindView(R.id.edit_text_location)EditText getmUserLocation;
+
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -88,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity{
     }
 
     private void onRegisterUser() {
-        if(getUserDisplayName().equals("") || getUserEmail().equals("") || getUserPassword().equals("")){
+        if(getUserName().equals("") || getUserEmail().equals("") || getUserPassword().equals("")){
             showFieldsAreRequired();
         }else if(isIncorrectEmail(getUserEmail()) || isIncorrectPassword(getUserPassword())) {
             showIncorrectEmailPassword();
@@ -119,8 +121,8 @@ public class RegisterActivity extends AppCompatActivity{
         dialog.show();
     }
 
-    private String getUserDisplayName() {
-        return mUserFirstNameRegister.getText().toString().trim();
+    private String getUserName() {
+        return mUserName.getText().toString().trim();
     }
 
     private String getUserEmail() {
@@ -129,6 +131,9 @@ public class RegisterActivity extends AppCompatActivity{
 
     private String getUserPassword() {
         return mUserPassWordRegister.getText().toString().trim();
+    }
+    private String getUserLocation() {
+        return getmUserLocation.getText().toString().trim();
     }
 
 
@@ -147,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity{
 
                 Log.v("Date",date);
 
-                Users_ref.child("displayName").setValue(mUserFirstNameRegister.getText().toString().trim());
+                Users_ref.child("displayName").setValue(mUserName.getText().toString().trim());
                 Users_ref.child("email").setValue(email);
                 Users_ref.child("createdAt").setValue(date);
                 Users_ref.child("avatarId").setValue("1");
