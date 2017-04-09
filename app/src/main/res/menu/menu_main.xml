@@ -7,4 +7,15 @@
         android:title="Logout"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    <item android:id="@+id/categories"
+          android:title="Category">
+                <menu>
+                <item android:id="@+id/leave"
+                    android:title="Leave Request"/>
+                <item android:id="@+id/transport"
+                    android:title="Transport"/>
+                </menu>
+                    />
+    </item>
+
 </menu>
