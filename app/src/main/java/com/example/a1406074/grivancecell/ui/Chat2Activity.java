@@ -2,6 +2,7 @@ package com.example.a1406074.grivancecell.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.a1406074.grivancecell.Service.MyService;
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapters;
@@ -43,6 +45,7 @@ public class Chat2Activity extends AppCompatActivity {
     @BindView(R.id.recycler_view_chat) RecyclerView mChatRecyclerView;
     // @BindView(R.id.edit_text_message) EditText mUserMessageChatText;
 
+    private static String CATEGORY_SELECTED=null;
     private int Count=0;
     private String mRecipientId;
     private String mCurrentUserId;
@@ -89,7 +92,7 @@ public class Chat2Activity extends AppCompatActivity {
         databaseReference1=FirebaseDatabase.getInstance().getReference().child("Chats").child(mAuth.getCurrentUser().getUid()).child(mRecipientId);
 
 
-        messageChatDatabase.addValueEventListener(new ValueEventListener() {
+        databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -136,18 +139,24 @@ public class Chat2Activity extends AppCompatActivity {
                     NEWCHATS.add(chats);
                 }
 
-                if(!TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim()))
+
+                if(!(TextUtils.isEmpty(mUserMessageChatText.getText().toString().trim())||TextUtils.isEmpty(CATEGORY_SELECTED)))
                 {
                     // Chats.clear();
                     FLAG="Second";
                     final  DatabaseReference ds= messageChatDatabase.child(System.currentTimeMillis()-10000+"");
                     DatabaseReference df =databaseReference1.child(System.currentTimeMillis()-10000+"");
-                    ds.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
+                    ds.child("Message").setValue(CATEGORY_SELECTED+":\n"+mUserMessageChatText.getText().toString().trim());
                     ds.child("Uid").setValue(mAuth.getCurrentUser().getUid());
-                    ds.child("Date").setValue(new SimpleDateFormat("dd-mm-yyyy").format(new Date(System.currentTimeMillis())));
-                    df.child("Message").setValue(mUserMessageChatText.getText().toString().trim());
+                    df.child("Message").setValue(CATEGORY_SELECTED+":\n"+mUserMessageChatText.getText().toString().trim());
                     df.child("Uid").setValue(mAuth.getCurrentUser().getUid());
                     mUserMessageChatText.setText("");
+
+                    CATEGORY_SELECTED=null;
+                }
+                else if(CATEGORY_SELECTED==null)
+                {
+                    Toast.makeText(getApplicationContext(),"Select a category",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -173,10 +182,9 @@ public class Chat2Activity extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
 
 
+
                     mAuth.signOut();
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
-                    databaseReference.child("connection").setValue("offline");
 
 
                     Intent REDIRECT = new Intent(Chat2Activity.this, LogInActivity.class);
@@ -190,6 +198,16 @@ public class Chat2Activity extends AppCompatActivity {
 
 
         }
+        if(item.getItemId()==R.id.leave)
+        {
+            CATEGORY_SELECTED="Leave Request";
+        }
+
+        if(item.getItemId()==R.id.transport)
+        {
+            CATEGORY_SELECTED="Transport";
+        }
+
 
         return super.onOptionsItemSelected(item);
 

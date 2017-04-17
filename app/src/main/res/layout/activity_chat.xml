@@ -1,34 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:layout_weight="100"
+    android:background="@android:color/background_dark"
     tools:context="com.example.a1406074.grivancecell.ui.ChatActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_chat"
+    <ScrollView
+        android:layout_weight="99.5"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/background_dark" />
+        android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_gravity="bottom"
-        android:background="@color/tw__blue_default"
-        android:layout_above="@+id/senderContainer"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+
+    </ScrollView>
+
     <RelativeLayout
+
+        android:layout_weight="0.5"
         android:id="@+id/senderContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cardview_light_background"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp">
+       >
 
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="@color/tw__blue_default"/>
         <EditText
             android:id="@+id/edit_text_message"
             android:layout_marginLeft="5dp"
@@ -58,4 +67,4 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
 
-</RelativeLayout>
+</LinearLayout>

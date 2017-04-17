@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.example.a1406074.grivancecell.Service.MyService;
 import com.example.a1406074.grivancecell.adapter.RecyclerViewAdapter;
+import com.example.a1406074.grivancecell.model.Stats;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ChildEventListener mChildEventListener;
     private RecyclerViewAdapter mUsersChatAdapter;
     private DatabaseReference NotificationRef;
+    private ArrayList<String > UIDs=new ArrayList<>();
     public static String ReceipID;
     public int TO_REMOVE;
     public int count = -1;
@@ -167,18 +169,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
     private void initializeCountDrawer(){
+
         solved.setGravity(Gravity.CENTER_VERTICAL);
         solved.setTypeface(null, Typeface.BOLD);
         solved.setTextColor(getResources().getColor(R.color.colorAccent));
-        solved.setText("99+");
         raised.setGravity(Gravity.CENTER_VERTICAL);
         raised.setTypeface(null,Typeface.BOLD);
         raised.setTextColor(getResources().getColor(R.color.colorAccent));
-        raised.setText("7");
         pending.setGravity(Gravity.CENTER_VERTICAL);
         pending.setTypeface(null,Typeface.BOLD);
         pending.setTextColor(getResources().getColor(R.color.colorAccent));
-        pending.setText("7");
+
+
+
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference().child("Statistics");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Stats stats=dataSnapshot.getValue(Stats.class);
+                solved.setText(stats.Completed);
+                raised.setText(stats.Raised);
+                pending.setText(stats.Pending);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
     }
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -194,8 +219,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else  if(id==R.id.Broadcast)
         {
-            Dialog d= new Dialog(MainActivity.this);
+            final Dialog d= new Dialog(MainActivity.this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setCanceledOnTouchOutside(false);
             d.setContentView(R.layout.writemessage);
 
             final EditText editText=(EditText) d.findViewById(R.id.DialogText);
@@ -206,7 +232,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onClick(View v) {
 
-                    String Message=editText.getText().toString().trim();
+                    UIDs=new ArrayList<String>();
+
+                    final  String Message=editText.getText().toString().trim();
                     if(!TextUtils.isEmpty(Message)) {
                         NotificationRef.push().setValue(Message).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -216,22 +244,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             }
                         });
+
+                        FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                String TIME=System.currentTimeMillis()+"";
+
+                                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
+                                {
+
+
+                                    UIDs.add(dataSnapshot1.getKey());
+                                    Log.v("BroadCastValues",UIDs.size()+"....");
+
+                                    FirebaseDatabase.getInstance().getReference().child("Chats").child(dataSnapshot1.getKey()).child(mAuth.getCurrentUser().getUid()).child(TIME).child("Message").setValue(Message);
+                                    FirebaseDatabase.getInstance().getReference().child("Chats").child(dataSnapshot1.getKey()).child(mAuth.getCurrentUser().getUid()).child(TIME).child("Uid").setValue(mAuth.getCurrentUser().getUid());
+
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                     }
 
-
-                }
-            });
-
-            NotificationRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    Log.v("DatasnapshotValue",dataSnapshot.toString());
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
@@ -257,7 +300,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) {
+        if (item.getItemId() == R.id.action_logout)
+        {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
             databaseReference.child("connection").setValue("offline").addOnSuccessListener(new OnSuccessListener<Void>() {

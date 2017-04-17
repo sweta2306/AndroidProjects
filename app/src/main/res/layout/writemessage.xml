@@ -11,6 +11,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:minEms="10"
+            android:textColor="#000"
             android:id="@+id/DialogText"
             android:hint="Enter broadcast message"
             android:textColorHint="#000"
